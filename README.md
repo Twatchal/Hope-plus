@@ -4,9 +4,15 @@ this rename doesnt add modules just a rename
 
 # Why?
 bc i was bored
+lol
+
+# Can i have source code?
+no you cant
+live whit it
 
 # Where i can use it?
-Shit anarchy servers like 6b6t or 7b7t
+shit anarchy servers
+like 6b6t or 7b7t
 
 # Rename?
-Yes
+ye
