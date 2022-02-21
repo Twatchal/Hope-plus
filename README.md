@@ -1,4 +1,4 @@
-![GitHub all releases](https://img.shields.io/github/downloads/lambda-client/lambda/total?color=seagreen)
+![GitHub all releases](https://img.shields.io/github/downloads/Hope-project/total?color=seagreen)
 
 ## Hope Client
 Shit w+2 rename
