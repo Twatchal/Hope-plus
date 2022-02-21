@@ -1,7 +1,7 @@
-![GitHub all releases](https://img.shields.io/github/downloads/Hope-project/total?color=seagreen)
 
 ## Hope Client
-Shit w+2 rename
+free nigger
+shit w+2 rename
 this rename doesnt add modules
 just a rename
 
