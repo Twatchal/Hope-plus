@@ -1,0 +1,15 @@
+[{
+	"modid"        : "wurstplus",
+	"name"         : "Hope+",
+	"description"  : "Hope+? more like w+2",
+	"version"      : "0.1",
+	"mcversion"    : "1.12.2-14.23.5.2772",
+	"url"          : "https://among.us",
+	"updateUrl"    : "https://among.us",
+	"authorList"   : ["travis, Twatchal"],
+	"credits"      : "el pepe",
+	"logoFile"     : "hope.png",
+	"screenshots"  : [],
+	"dependencies" : []
+
+}]
