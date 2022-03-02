@@ -36,7 +36,7 @@ public class Wurstplus
     
     @Mod.EventHandler
     public void WurstplusStarting(final FMLInitializationEvent event) {
-        this.init_log("Minecraft 1.12.2 | Hope+ v0.1");
+        this.init_log("Minecraft 1.12.2 | Hope+ v0.1.2");
         WurstplusEventHandler.INSTANCE = new WurstplusEventHandler();
         send_minecraft_log("initialising managers");
         Wurstplus.setting_manager = new WurstplusSettingManager();
@@ -47,7 +47,7 @@ public class Wurstplus
         final WurstplusCommandManager command_manager = new WurstplusCommandManager();
         send_minecraft_log("done");
         send_minecraft_log("initialising guis");
-        Display.setTitle("Minecraft 1.12.2 | Hope+ v0.1");
+        Display.setTitle("Minecraft 1.12.2 | Hope+ v0.1.2");
         Wurstplus.click_gui = new WurstplusGUI();
         Wurstplus.click_hud = new WurstplusHUD();
         send_minecraft_log("done");
@@ -81,7 +81,7 @@ public class Wurstplus
     }
     
     public static String get_name() {
-        return "Minecraft 1.12.2 | Hope+ v0.1";
+        return "Minecraft 1.12.2 | Hope+ v0.1.2";
     }
     
     public static String get_version() {
