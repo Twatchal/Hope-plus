@@ -1,4 +1,3 @@
-![GitHub all releases](https://img.shields.io/github/downloads/Twatchal/Hope-project/total?color=seagreen)
 ![GitHub repo size](https://img.shields.io/github/repo-size/Twatchal/Hope-project)
 ![Lines of code](https://img.shields.io/tokei/lines/github/Twatchal/Hope-project?color=lightcoral&label=lines%20of%20code)
 # Hope Client
