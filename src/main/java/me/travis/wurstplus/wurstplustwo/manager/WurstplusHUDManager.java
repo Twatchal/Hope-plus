@@ -1,14 +1,40 @@
 package me.travis.wurstplus.wurstplustwo.manager;
 
-import me.travis.wurstplus.wurstplustwo.guiscreen.render.pinnables.*;
-import me.travis.wurstplus.wurstplustwo.guiscreen.hud.*;
-import java.util.function.*;
-import java.util.*;
+import java.lang.invoke.LambdaMetafactory;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.function.Function;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusArmorDurabilityWarner;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusArmorPreview;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusArrayList;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusCompass;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusCoordinates;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusCrystalCount;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusDirection;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusEXPCount;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusEffectHud;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusEntityList;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusFPS;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusFriendList;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusGappleCount;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusInventoryPreview;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusInventoryXCarryPreview;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusLogo;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusPing;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusPlayerList;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusPvpHud;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusSpeedometer;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusSurroundBlocks;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusTPS;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusTime;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusTotemCount;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusUser;
+import me.travis.wurstplus.wurstplustwo.guiscreen.hud.WurstplusWatermark;
+import me.travis.wurstplus.wurstplustwo.guiscreen.render.pinnables.WurstplusPinnable;
 
-public class WurstplusHUDManager
-{
-    public static ArrayList<WurstplusPinnable> array_hud;
-    
+public class WurstplusHUDManager {
+    public static ArrayList<WurstplusPinnable> array_hud = new ArrayList();
+
     public WurstplusHUDManager() {
         this.add_component_pinnable((WurstplusPinnable)new WurstplusWatermark());
         this.add_component_pinnable((WurstplusPinnable)new WurstplusArrayList());
@@ -36,36 +62,30 @@ public class WurstplusHUDManager
         this.add_component_pinnable((WurstplusPinnable)new WurstplusTPS());
         this.add_component_pinnable((WurstplusPinnable)new WurstplusPlayerList());
         this.add_component_pinnable((WurstplusPinnable)new WurstplusDirection());
-        WurstplusHUDManager.array_hud.sort(Comparator.comparing((Function<? super WurstplusPinnable, ? extends Comparable>)WurstplusPinnable::get_title));
+        array_hud.sort(Comparator.comparing((Function)(Function)LambdaMetafactory.metafactory(null, null, null, (Ljava/lang/Object;)Ljava/lang/Object;, get_title(), (Lme/travis/wurstplus/wurstplustwo/guiscreen/render/pinnables/WurstplusPinnable;)Ljava/lang/String;)()));
     }
-    
-    public void add_component_pinnable(final WurstplusPinnable module) {
-        WurstplusHUDManager.array_hud.add(module);
+
+    public void add_component_pinnable(WurstplusPinnable module) {
+        array_hud.add((Object)module);
     }
-    
+
     public ArrayList<WurstplusPinnable> get_array_huds() {
-        return WurstplusHUDManager.array_hud;
+        return array_hud;
     }
-    
+
     public void render() {
-        for (final WurstplusPinnable pinnables : this.get_array_huds()) {
-            if (pinnables.is_active()) {
-                pinnables.render();
-            }
+        for (WurstplusPinnable pinnables : this.get_array_huds()) {
+            if (!pinnables.is_active()) continue;
+            pinnables.render();
         }
     }
-    
-    public WurstplusPinnable get_pinnable_with_tag(final String tag) {
+
+    public WurstplusPinnable get_pinnable_with_tag(String tag) {
         WurstplusPinnable pinnable_requested = null;
-        for (final WurstplusPinnable pinnables : this.get_array_huds()) {
-            if (pinnables.get_tag().equalsIgnoreCase(tag)) {
-                pinnable_requested = pinnables;
-            }
+        for (WurstplusPinnable pinnables : this.get_array_huds()) {
+            if (!pinnables.get_tag().equalsIgnoreCase(tag)) continue;
+            pinnable_requested = pinnables;
         }
         return pinnable_requested;
-    }
-    
-    static {
-        WurstplusHUDManager.array_hud = new ArrayList<WurstplusPinnable>();
     }
 }

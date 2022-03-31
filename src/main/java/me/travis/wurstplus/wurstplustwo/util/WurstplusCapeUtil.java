@@ -1,21 +1,25 @@
 package me.travis.wurstplus.wurstplustwo.util;
 
-import java.net.*;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.UUID;
 
-public class WurstplusCapeUtil
-{
-    static final ArrayList<String> final_uuid_list;
-    
+public class WurstplusCapeUtil {
+    static final ArrayList<String> final_uuid_list = WurstplusCapeUtil.get_uuids();
+
     public static ArrayList<String> get_uuids() {
         try {
-            final URL url = new URL("https://pastebin.com/raw/x1nBEiiA");
-            final BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
-            final ArrayList<String> uuid_list = new ArrayList<String>();
             String s;
+            URL url = new URL("https://pastebin.com/raw/x1nBEiiA");
+            BufferedReader reader = new BufferedReader((Reader)new InputStreamReader(url.openStream()));
+            ArrayList uuid_list = new ArrayList();
             while ((s = reader.readLine()) != null) {
-                uuid_list.add(s);
+                uuid_list.add((Object)s);
             }
             return uuid_list;
         }
@@ -23,17 +27,12 @@ public class WurstplusCapeUtil
             return null;
         }
     }
-    
-    public static boolean is_uuid_valid(final UUID uuid) {
-        for (final String u : Objects.requireNonNull(WurstplusCapeUtil.final_uuid_list)) {
-            if (u.equals(uuid.toString())) {
-                return true;
-            }
+
+    public static boolean is_uuid_valid(UUID uuid) {
+        for (String u : (ArrayList)Objects.requireNonNull(final_uuid_list)) {
+            if (!u.equals((Object)uuid.toString())) continue;
+            return true;
         }
         return false;
-    }
-    
-    static {
-        final_uuid_list = get_uuids();
     }
 }

@@ -1,68 +1,61 @@
 package me.travis.wurstplus.wurstplustwo.util;
 
-import net.minecraft.client.*;
-import com.mojang.realmsclient.gui.*;
-import me.travis.wurstplus.wurstplustwo.hacks.*;
-import net.minecraft.util.text.event.*;
-import net.minecraft.util.text.*;
+import com.mojang.realmsclient.gui.ChatFormatting;
+import me.travis.wurstplus.wurstplustwo.hacks.WurstplusHack;
+import me.travis.wurstplus.wurstplustwo.util.WurstplusMessageUtil;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.GuiNewChat;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.event.HoverEvent;
 
-public class WurstplusMessageUtil
-{
-    public static final Minecraft mc;
-    public static ChatFormatting g;
-    public static ChatFormatting b;
-    public static ChatFormatting a;
-    public static ChatFormatting r;
-    public static String opener;
-    
-    public static void toggle_message(final WurstplusHack module) {
+public class WurstplusMessageUtil {
+    public static final Minecraft mc = Minecraft.func_71410_x();
+    public static ChatFormatting g = ChatFormatting.GOLD;
+    public static ChatFormatting b = ChatFormatting.BLUE;
+    public static ChatFormatting a = ChatFormatting.DARK_AQUA;
+    public static ChatFormatting r = ChatFormatting.RESET;
+    public static String opener = (Object)g + "\u00a79Hope \u00a78\u00bb" + (Object)ChatFormatting.GRAY + " " + (Object)r;
+
+    public static void toggle_message(WurstplusHack module) {
         if (module.is_active()) {
-            if (module.get_tag().equals("AutoCrystal")) {
-                client_message_simple(WurstplusMessageUtil.opener + "§rAutocrystal §7toggled" + ChatFormatting.DARK_GREEN + " §aon");
+            if (module.get_tag().equals((Object)"AutoCrystal")) {
+                WurstplusMessageUtil.client_message_simple(opener + "\u00a7rAutocrystal \u00a77toggled" + (Object)ChatFormatting.DARK_GREEN + " \u00a7aon");
+            } else {
+                WurstplusMessageUtil.client_message_simple(opener + (Object)r + module.get_name() + (Object)ChatFormatting.DARK_GREEN + " \u00a77toggled \u00a7aon");
             }
-            else {
-                client_message_simple(WurstplusMessageUtil.opener + WurstplusMessageUtil.r + module.get_name() + ChatFormatting.DARK_GREEN + " §7toggled §aon");
-            }
-        }
-        else if (module.get_tag().equals("AutoCrystal")) {
-            client_message_simple(WurstplusMessageUtil.opener + "§rAutocrystal §7toggled" + ChatFormatting.RED + " §coff" + WurstplusMessageUtil.r + "");
-        }
-        else {
-            client_message_simple(WurstplusMessageUtil.opener + WurstplusMessageUtil.r + module.get_name() + ChatFormatting.RED + " §7toggled §coff");
+        } else if (module.get_tag().equals((Object)"AutoCrystal")) {
+            WurstplusMessageUtil.client_message_simple(opener + "\u00a7rAutocrystal \u00a77toggled" + (Object)ChatFormatting.RED + " \u00a7coff" + (Object)r + "");
+        } else {
+            WurstplusMessageUtil.client_message_simple(opener + (Object)r + module.get_name() + (Object)ChatFormatting.RED + " \u00a77toggled \u00a7coff");
         }
     }
-    
-    public static void client_message_simple(final String message) {
+
+    public static void client_message_simple(String message) {
         if (WurstplusMessageUtil.mc.field_71439_g != null) {
-            final ITextComponent itc = new TextComponentString(message).func_150255_a(new Style().func_150209_a(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new TextComponentString("ez"))));
+            ITextComponent itc = new TextComponentString(message).func_150255_a(new Style().func_150209_a(new HoverEvent(HoverEvent.Action.SHOW_TEXT, (ITextComponent)new TextComponentString("ez"))));
             WurstplusMessageUtil.mc.field_71456_v.func_146158_b().func_146234_a(itc, 5936);
         }
     }
-    
-    public static void client_message(final String message) {
+
+    public static void client_message(String message) {
         if (WurstplusMessageUtil.mc.field_71439_g != null) {
-            WurstplusMessageUtil.mc.field_71439_g.func_145747_a((ITextComponent)new WurstplusMessageUtil.ChatMessage(message));
+            WurstplusMessageUtil.mc.field_71439_g.func_145747_a((ITextComponent)new ChatMessage(message));
         }
     }
-    
-    public static void send_client_message_simple(final String message) {
-        client_message(ChatFormatting.GOLD + "§9Hope §8»" + " " + WurstplusMessageUtil.r + message);
+
+    public static void send_client_message_simple(String message) {
+        WurstplusMessageUtil.client_message((Object)ChatFormatting.GOLD + "\u00a79Hope \u00a78\u00bb" + " " + (Object)r + message);
     }
-    
-    public static void send_client_message(final String message) {
-        client_message(ChatFormatting.GOLD + "§9Hope §8»" + " " + WurstplusMessageUtil.r + message);
+
+    public static void send_client_message(String message) {
+        WurstplusMessageUtil.client_message((Object)ChatFormatting.GOLD + "\u00a79Hope \u00a78\u00bb" + " " + (Object)r + message);
     }
-    
-    public static void send_client_error_message(final String message) {
-        client_message(ChatFormatting.RED + "§4Hope §8»" + " " + WurstplusMessageUtil.r + message);
-    }
-    
-    static {
-        mc = Minecraft.func_71410_x();
-        WurstplusMessageUtil.g = ChatFormatting.GOLD;
-        WurstplusMessageUtil.b = ChatFormatting.BLUE;
-        WurstplusMessageUtil.a = ChatFormatting.DARK_AQUA;
-        WurstplusMessageUtil.r = ChatFormatting.RESET;
-        WurstplusMessageUtil.opener = WurstplusMessageUtil.g + "§9Hope §8»" + ChatFormatting.GRAY + " " + WurstplusMessageUtil.r;
+
+    public static void send_client_error_message(String message) {
+        WurstplusMessageUtil.client_message((Object)ChatFormatting.RED + "\u00a74Hope \u00a78\u00bb" + " " + (Object)r + message);
     }
 }
