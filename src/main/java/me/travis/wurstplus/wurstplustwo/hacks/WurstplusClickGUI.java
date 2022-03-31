@@ -1,11 +1,17 @@
 package me.travis.wurstplus.wurstplustwo.hacks;
 
-import me.travis.wurstplus.wurstplustwo.guiscreen.settings.*;
-import me.travis.wurstplus.*;
-import net.minecraft.client.gui.*;
+import me.travis.wurstplus.Wurstplus;
+import me.travis.wurstplus.wurstplustwo.guiscreen.WurstplusGUI;
+import me.travis.wurstplus.wurstplustwo.guiscreen.settings.WurstplusSetting;
+import me.travis.wurstplus.wurstplustwo.hacks.WurstplusCategory;
+import me.travis.wurstplus.wurstplustwo.hacks.WurstplusHack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.multiplayer.WorldClient;
 
-public class WurstplusClickGUI extends WurstplusHack
-{
+public class WurstplusClickGUI
+extends WurstplusHack {
     WurstplusSetting label_frame;
     WurstplusSetting name_frame_r;
     WurstplusSetting name_frame_g;
@@ -28,7 +34,7 @@ public class WurstplusClickGUI extends WurstplusHack
     WurstplusSetting border_widget_r;
     WurstplusSetting border_widget_g;
     WurstplusSetting border_widget_b;
-    
+
     public WurstplusClickGUI() {
         super(WurstplusCategory.WURSTPLUS_GUI);
         this.label_frame = this.create("info", "ClickGUIInfoFrame", "Frames");
@@ -58,7 +64,7 @@ public class WurstplusClickGUI extends WurstplusHack
         this.description = "The main gui";
         this.set_bind(54);
     }
-    
+
     public void update() {
         Wurstplus.click_gui.theme_frame_name_r = this.name_frame_r.get_value(1);
         Wurstplus.click_gui.theme_frame_name_g = this.name_frame_g.get_value(1);
@@ -81,16 +87,16 @@ public class WurstplusClickGUI extends WurstplusHack
         Wurstplus.click_gui.theme_widget_border_g = this.border_widget_g.get_value(1);
         Wurstplus.click_gui.theme_widget_border_b = this.border_widget_b.get_value(1);
     }
-    
+
     public void enable() {
         if (WurstplusClickGUI.mc.field_71441_e != null && WurstplusClickGUI.mc.field_71439_g != null) {
-            WurstplusClickGUI.mc.func_147108_a((GuiScreen)Wurstplus.click_gui);
+            mc.func_147108_a((GuiScreen)Wurstplus.click_gui);
         }
     }
-    
+
     public void disable() {
         if (WurstplusClickGUI.mc.field_71441_e != null && WurstplusClickGUI.mc.field_71439_g != null) {
-            WurstplusClickGUI.mc.func_147108_a((GuiScreen)null);
+            mc.func_147108_a(null);
         }
     }
 }

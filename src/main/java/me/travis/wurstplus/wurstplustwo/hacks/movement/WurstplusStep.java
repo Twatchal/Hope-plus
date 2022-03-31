@@ -1,25 +1,31 @@
 package me.travis.wurstplus.wurstplustwo.hacks.movement;
 
-import me.travis.wurstplus.wurstplustwo.guiscreen.settings.*;
-import me.travis.wurstplus.wurstplustwo.hacks.*;
-import net.minecraft.network.play.client.*;
-import net.minecraft.network.*;
-import net.minecraft.entity.*;
-import net.minecraft.util.math.*;
-import java.util.*;
+import java.util.List;
+import me.travis.wurstplus.wurstplustwo.guiscreen.settings.WurstplusSetting;
+import me.travis.wurstplus.wurstplustwo.hacks.WurstplusCategory;
+import me.travis.wurstplus.wurstplustwo.hacks.WurstplusHack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.entity.Entity;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.util.MovementInput;
+import net.minecraft.util.math.AxisAlignedBB;
 
-public class WurstplusStep extends WurstplusHack
-{
+public class WurstplusStep
+extends WurstplusHack {
     WurstplusSetting mode;
-    
+
     public WurstplusStep() {
         super(WurstplusCategory.WURSTPLUS_MOVEMENT);
-        this.mode = this.create("Mode", "StepMode", "Normal", this.combobox(new String[] { "Normal", "Reverse" }));
+        this.mode = this.create("Mode", "StepMode", "Normal", this.combobox(new String[]{"Normal", "Reverse"}));
         this.name = "Step";
         this.tag = "Step";
         this.description = "Move up / down block big";
     }
-    
+
     public void update() {
         if (!WurstplusStep.mc.field_71439_g.field_70123_F && this.mode.in("Normal")) {
             return;
@@ -30,7 +36,7 @@ public class WurstplusStep extends WurstplusHack
         if (WurstplusStep.mc.field_71439_g.field_191988_bg == 0.0f && WurstplusStep.mc.field_71439_g.field_70702_br == 0.0f) {
             return;
         }
-        final double n = this.get_n_normal();
+        double n = this.get_n_normal();
         if (this.mode.in("Normal")) {
             if (n < 0.0 || n > 2.0) {
                 return;
@@ -65,18 +71,17 @@ public class WurstplusStep extends WurstplusHack
             WurstplusStep.mc.field_71439_g.field_70181_x = -1.0;
         }
     }
-    
+
     public double get_n_normal() {
         WurstplusStep.mc.field_71439_g.field_70138_W = 0.5f;
         double max_y = -1.0;
-        final AxisAlignedBB grow = WurstplusStep.mc.field_71439_g.func_174813_aQ().func_72317_d(0.0, 0.05, 0.0).func_186662_g(0.05);
+        AxisAlignedBB grow = WurstplusStep.mc.field_71439_g.func_174813_aQ().func_72317_d(0.0, 0.05, 0.0).func_186662_g(0.05);
         if (!WurstplusStep.mc.field_71441_e.func_184144_a((Entity)WurstplusStep.mc.field_71439_g, grow.func_72317_d(0.0, 2.0, 0.0)).isEmpty()) {
             return 100.0;
         }
-        for (final AxisAlignedBB aabb : WurstplusStep.mc.field_71441_e.func_184144_a((Entity)WurstplusStep.mc.field_71439_g, grow)) {
-            if (aabb.field_72337_e > max_y) {
-                max_y = aabb.field_72337_e;
-            }
+        for (AxisAlignedBB aabb : WurstplusStep.mc.field_71441_e.func_184144_a((Entity)WurstplusStep.mc.field_71439_g, grow)) {
+            if (aabb.field_72337_e <= max_y) continue;
+            max_y = aabb.field_72337_e;
         }
         return max_y - WurstplusStep.mc.field_71439_g.field_70163_u;
     }

@@ -1,18 +1,31 @@
 package me.travis.wurstplus.wurstplustwo.hacks.movement;
 
-import me.travis.wurstplus.wurstplustwo.guiscreen.settings.*;
-import me.zero.alpine.fork.listener.*;
-import me.travis.wurstplus.wurstplustwo.event.events.*;
-import me.travis.wurstplus.wurstplustwo.hacks.*;
-import java.util.function.*;
-import net.minecraft.util.math.*;
-import net.minecraft.network.play.client.*;
-import net.minecraft.network.*;
-import net.minecraft.client.entity.*;
-import net.minecraft.init.*;
+import java.util.List;
+import java.util.function.Predicate;
+import me.travis.wurstplus.wurstplustwo.event.events.WurstplusEventMove;
+import me.travis.wurstplus.wurstplustwo.event.events.WurstplusEventPlayerJump;
+import me.travis.wurstplus.wurstplustwo.guiscreen.settings.WurstplusSetting;
+import me.travis.wurstplus.wurstplustwo.hacks.WurstplusCategory;
+import me.travis.wurstplus.wurstplustwo.hacks.WurstplusHack;
+import me.zero.alpine.fork.listener.EventHandler;
+import me.zero.alpine.fork.listener.EventHook;
+import me.zero.alpine.fork.listener.Listener;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.client.settings.GameSettings;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.player.PlayerCapabilities;
+import net.minecraft.init.MobEffects;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.client.CPacketPlayer;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.MovementInput;
+import net.minecraft.util.math.MathHelper;
 
-public class WurstplusStrafe extends WurstplusHack
-{
+public class WurstplusStrafe
+extends WurstplusHack {
     WurstplusSetting speed_mode;
     WurstplusSetting auto_sprint;
     WurstplusSetting on_water;
@@ -23,21 +36,22 @@ public class WurstplusStrafe extends WurstplusHack
     private Listener<WurstplusEventPlayerJump> on_jump;
     @EventHandler
     private Listener<WurstplusEventMove> player_move;
-    
+
     public WurstplusStrafe() {
         super(WurstplusCategory.WURSTPLUS_MOVEMENT);
-        this.speed_mode = this.create("Mode", "StrafeMode", "Strafe", this.combobox(new String[] { "Strafe", "On Ground" }));
+        this.speed_mode = this.create("Mode", "StrafeMode", "Strafe", this.combobox(new String[]{"Strafe", "On Ground"}));
         this.auto_sprint = this.create("Auto Sprint", "StrafeSprint", true);
         this.on_water = this.create("On Water", "StrafeOnWater", true);
         this.auto_jump = this.create("Auto Jump", "StrafeAutoJump", true);
         this.backward = this.create("Backwards", "StrafeBackwards", true);
         this.bypass = this.create("Bypass", "StrafeBypass", false);
-        this.on_jump = (Listener<WurstplusEventPlayerJump>)new Listener(event -> {
+        this.on_jump = new Listener(event -> {
             if (this.speed_mode.in("Strafe")) {
                 event.cancel();
             }
-        }, new Predicate[0]);
-        this.player_move = (Listener<WurstplusEventMove>)new Listener(event -> {
+        }
+        , new Predicate[0]);
+        this.player_move = new Listener(event -> {
             if (this.speed_mode.in("On Ground")) {
                 return;
             }
@@ -52,8 +66,8 @@ public class WurstplusStrafe extends WurstplusHack
             float move_strafe = WurstplusStrafe.mc.field_71439_g.field_71158_b.field_78902_a;
             float rotation_yaw = WurstplusStrafe.mc.field_71439_g.field_70177_z;
             if (WurstplusStrafe.mc.field_71439_g.func_70644_a(MobEffects.field_76424_c)) {
-                final int amp = WurstplusStrafe.mc.field_71439_g.func_70660_b(MobEffects.field_76424_c).func_76458_c();
-                player_speed *= 1.2f * (amp + 1);
+                int amp = WurstplusStrafe.mc.field_71439_g.func_70660_b(MobEffects.field_76424_c).func_76458_c();
+                player_speed *= 1.2f * (float)(amp + 1);
             }
             if (!this.bypass.get_value(true)) {
                 player_speed *= 1.0064f;
@@ -61,33 +75,31 @@ public class WurstplusStrafe extends WurstplusHack
             if (move_forward == 0.0f && move_strafe == 0.0f) {
                 event.set_x(0.0);
                 event.set_z(0.0);
-            }
-            else {
+            } else {
                 if (move_forward != 0.0f) {
                     if (move_strafe > 0.0f) {
-                        rotation_yaw += ((move_forward > 0.0f) ? -45 : 45);
-                    }
-                    else if (move_strafe < 0.0f) {
-                        rotation_yaw += ((move_forward > 0.0f) ? 45 : -45);
+                        rotation_yaw += (float)(move_forward > 0.0f ? -45 : 45);
+                    } else if (move_strafe < 0.0f) {
+                        rotation_yaw += (float)(move_forward > 0.0f ? 45 : -45);
                     }
                     move_strafe = 0.0f;
                     if (move_forward > 0.0f) {
                         move_forward = 1.0f;
-                    }
-                    else if (move_forward < 0.0f) {
+                    } else if (move_forward < 0.0f) {
                         move_forward = -1.0f;
                     }
                 }
-                event.set_x(move_forward * player_speed * Math.cos(Math.toRadians(rotation_yaw + 90.0f)) + move_strafe * player_speed * Math.sin(Math.toRadians(rotation_yaw + 90.0f)));
-                event.set_z(move_forward * player_speed * Math.sin(Math.toRadians(rotation_yaw + 90.0f)) - move_strafe * player_speed * Math.cos(Math.toRadians(rotation_yaw + 90.0f)));
+                event.set_x((double)(move_forward * player_speed) * Math.cos((double)Math.toRadians((double)(rotation_yaw + 90.0f))) + (double)(move_strafe * player_speed) * Math.sin((double)Math.toRadians((double)(rotation_yaw + 90.0f))));
+                event.set_z((double)(move_forward * player_speed) * Math.sin((double)Math.toRadians((double)(rotation_yaw + 90.0f))) - (double)(move_strafe * player_speed) * Math.cos((double)Math.toRadians((double)(rotation_yaw + 90.0f))));
             }
             event.cancel();
-        }, new Predicate[0]);
+        }
+        , new Predicate[0]);
         this.name = "Strafe";
         this.tag = "Strafe";
         this.description = "its like running, but faster";
     }
-    
+
     public void update() {
         if (WurstplusStrafe.mc.field_71439_g.func_184218_aH()) {
             return;
@@ -106,18 +118,13 @@ public class WurstplusStrafe extends WurstplusHack
                 if (this.auto_jump.get_value(true)) {
                     WurstplusStrafe.mc.field_71439_g.field_70181_x = 0.4050000011920929;
                 }
-                final float yaw = this.get_rotation_yaw() * 0.017453292f;
-                final EntityPlayerSP field_71439_g = WurstplusStrafe.mc.field_71439_g;
-                field_71439_g.field_70159_w -= MathHelper.func_76126_a(yaw) * 0.2f;
-                final EntityPlayerSP field_71439_g2 = WurstplusStrafe.mc.field_71439_g;
-                field_71439_g2.field_70179_y += MathHelper.func_76134_b(yaw) * 0.2f;
-            }
-            else if (WurstplusStrafe.mc.field_71439_g.field_70122_E && this.speed_mode.in("On Ground")) {
-                final float yaw = this.get_rotation_yaw();
-                final EntityPlayerSP field_71439_g3 = WurstplusStrafe.mc.field_71439_g;
-                field_71439_g3.field_70159_w -= MathHelper.func_76126_a(yaw) * 0.2f;
-                final EntityPlayerSP field_71439_g4 = WurstplusStrafe.mc.field_71439_g;
-                field_71439_g4.field_70179_y += MathHelper.func_76134_b(yaw) * 0.2f;
+                float yaw = this.get_rotation_yaw() * 0.017453292f;
+                WurstplusStrafe.mc.field_71439_g.field_70159_w -= (double)(MathHelper.func_76126_a((float)yaw) * 0.2f);
+                WurstplusStrafe.mc.field_71439_g.field_70179_y += (double)(MathHelper.func_76134_b((float)yaw) * 0.2f);
+            } else if (WurstplusStrafe.mc.field_71439_g.field_70122_E && this.speed_mode.in("On Ground")) {
+                float yaw = this.get_rotation_yaw();
+                WurstplusStrafe.mc.field_71439_g.field_70159_w -= (double)(MathHelper.func_76126_a((float)yaw) * 0.2f);
+                WurstplusStrafe.mc.field_71439_g.field_70179_y += (double)(MathHelper.func_76134_b((float)yaw) * 0.2f);
                 WurstplusStrafe.mc.field_71439_g.field_71174_a.func_147297_a((Packet)new CPacketPlayer.Position(WurstplusStrafe.mc.field_71439_g.field_70165_t, WurstplusStrafe.mc.field_71439_g.field_70163_u + 0.4, WurstplusStrafe.mc.field_71439_g.field_70161_v, false));
             }
         }
@@ -125,7 +132,7 @@ public class WurstplusStrafe extends WurstplusHack
             WurstplusStrafe.mc.field_71439_g.field_70181_x = 0.4050000011920929;
         }
     }
-    
+
     private float get_rotation_yaw() {
         float rotation_yaw = WurstplusStrafe.mc.field_71439_g.field_70177_z;
         if (WurstplusStrafe.mc.field_71439_g.field_191988_bg < 0.0f) {
@@ -134,8 +141,7 @@ public class WurstplusStrafe extends WurstplusHack
         float n = 1.0f;
         if (WurstplusStrafe.mc.field_71439_g.field_191988_bg < 0.0f) {
             n = -0.5f;
-        }
-        else if (WurstplusStrafe.mc.field_71439_g.field_191988_bg > 0.0f) {
+        } else if (WurstplusStrafe.mc.field_71439_g.field_191988_bg > 0.0f) {
             n = 0.5f;
         }
         if (WurstplusStrafe.mc.field_71439_g.field_70702_br > 0.0f) {

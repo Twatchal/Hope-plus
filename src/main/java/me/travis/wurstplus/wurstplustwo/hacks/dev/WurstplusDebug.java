@@ -1,9 +1,10 @@
 package me.travis.wurstplus.wurstplustwo.hacks.dev;
 
-import me.travis.wurstplus.wurstplustwo.hacks.*;
+import me.travis.wurstplus.wurstplustwo.hacks.WurstplusCategory;
+import me.travis.wurstplus.wurstplustwo.hacks.WurstplusHack;
 
-public class WurstplusDebug extends WurstplusHack
-{
+public class WurstplusDebug
+extends WurstplusHack {
     public WurstplusDebug() {
         super(WurstplusCategory.WURSTPLUS_BETA);
         this.name = "Debug";

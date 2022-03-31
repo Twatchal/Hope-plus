@@ -1,19 +1,26 @@
 package me.travis.wurstplus.wurstplustwo.hacks.combat;
 
-import me.travis.wurstplus.wurstplustwo.guiscreen.settings.*;
-import me.travis.wurstplus.wurstplustwo.hacks.*;
-import net.minecraft.client.gui.inventory.*;
-import net.minecraft.init.*;
-import net.minecraft.item.*;
-import net.minecraft.inventory.*;
-import net.minecraft.entity.player.*;
+import me.travis.wurstplus.wurstplustwo.guiscreen.settings.WurstplusSetting;
+import me.travis.wurstplus.wurstplustwo.hacks.WurstplusCategory;
+import me.travis.wurstplus.wurstplustwo.hacks.WurstplusHack;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiInventory;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.ClickType;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
-public class WurstplusAutoGapple extends WurstplusHack
-{
+public class WurstplusAutoGapple
+extends WurstplusHack {
     WurstplusSetting delay;
     private boolean switching;
     private int last_slot;
-    
+
     public WurstplusAutoGapple() {
         super(WurstplusCategory.WURSTPLUS_COMBAT);
         this.delay = this.create("Delay", "GappleDelay", false);
@@ -22,7 +29,7 @@ public class WurstplusAutoGapple extends WurstplusHack
         this.tag = "AutoGapple";
         this.description = "put gapple in offhand";
     }
-    
+
     public void update() {
         if (WurstplusAutoGapple.mc.field_71462_r == null || WurstplusAutoGapple.mc.field_71462_r instanceof GuiInventory) {
             if (this.switching) {
@@ -32,28 +39,23 @@ public class WurstplusAutoGapple extends WurstplusHack
             this.swap_items(this.get_item_slot(), this.delay.get_value(true) ? 1 : 0);
         }
     }
-    
+
     private int get_item_slot() {
         if (Items.field_151153_ao == WurstplusAutoGapple.mc.field_71439_g.func_184592_cb().func_77973_b()) {
             return -1;
         }
-        int i = 36;
-        while (i >= 0) {
-            final Item item = WurstplusAutoGapple.mc.field_71439_g.field_71071_by.func_70301_a(i).func_77973_b();
-            if (item == Items.field_151153_ao) {
-                if (i < 9) {
-                    return -1;
-                }
-                return i;
+        for (int i = 36; i >= 0; --i) {
+            Item item = WurstplusAutoGapple.mc.field_71439_g.field_71071_by.func_70301_a(i).func_77973_b();
+            if (item != Items.field_151153_ao) continue;
+            if (i < 9) {
+                return -1;
             }
-            else {
-                --i;
-            }
+            return i;
         }
         return -1;
     }
-    
-    public void swap_items(final int slot, final int step) {
+
+    public void swap_items(int slot, int step) {
         if (slot == -1) {
             return;
         }
